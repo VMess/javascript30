@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Drum Kit</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+        }
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+            background: no-repeat center / cover url(audience.jpg);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        ul {
+            display: flex;
+        }
+
+        li {
+            margin: 1em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 4em;
+            height: 4em;
+            border: 3px solid grey;
+            border-radius: .5em;
+            background: #0004;
+            box-shadow: 0 0 0 0 gold;
+            color: white;
+            transition: box-shadow .07s;
+        }
+
+        li.playing {
+            box-shadow: 0 0 1em 1em gold;
+        }
+
+        kbd {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        p {
+            margin: 0;
+            text-transform: uppercase;
+            font-size: 70%;
+            color: gold;
+        }
+    </style>
+
+    <script>
+        'use strict';
+
+        window.addEventListener('DOMContentLoaded', e => {
+            const keys = Array.from(document.querySelectorAll('ul li'));
+            keys.forEach(key => key.addEventListener('transitionend', release));
+            window.addEventListener('keydown', press);
+
+            function press(e) {
+                const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+                const key = document.querySelector(`li[data-key="${e.keyCode}"]`);
+                if (audio) {
+                    audio.currentTime = 0; // rewind to the start
+                    audio.play();
+                    key.classList.add('playing');
+                }
+            }
+
+            function release(e) {
+                this.classList.remove('playing');
+            }
+        });
+
+/*
+        Tammy.wearing;
+
+        // "pjs"
+
+        Tammy.wear('workout outfit');
+
+        Tammy.wearing;
+        // "workout outfit"
+
+*/
+    </script>
+</head>
+
+<body>
+    <main>
+        <ul>
+            <li data-key="65">
+                <kbd>A</kbd>
+                <p>Clap</p>
+            </li>
+            <li data-key="83">
+                <kbd>S</kbd>
+                <p>Hihat</p>
+            </li>
+            <li data-key="68">
+                <kbd>D</kbd>
+                <p>Kick</p>
+            </li>
+            <li data-key="70">
+                <kbd>F</kbd>
+                <p>Openhat</p>
+            </li>
+            <li data-key="71">
+                <kbd>G</kbd>
+                <p>Boom</p>
+            </li>
+            <li data-key="72">
+                <kbd>H</kbd>
+                <p>Ride</p>
+            </li>
+            <li data-key="74">
+                <kbd>J</kbd>
+                <p>Snare</p>
+            </li>
+            <li data-key="75">
+                <kbd>K</kbd>
+                <p>Tom</p>
+            </li>
+            <li data-key="76">
+                <kbd>L</kbd>
+                <p>Tink</p>
+            </li>
+        </ul>
+    </main>
+
+
+    <audio data-key="65" src="clap.wav"></audio>
+    <audio data-key="83" src="hihat.wav"></audio>
+    <audio data-key="68" src="kick.wav"></audio>
+    <audio data-key="70" src="openhat.wav"></audio>
+    <audio data-key="71" src="boom.wav"></audio>
+    <audio data-key="72" src="ride.wav"></audio>
+    <audio data-key="74" src="snare.wav"></audio>
+    <audio data-key="75" src="tom.wav"></audio>
+    <audio data-key="76" src="tink.wav"></audio>
+</body>
+
+</html>
