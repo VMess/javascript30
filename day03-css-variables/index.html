@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Scoped CSS Variables and JS</title>
+
+    <style>
+        :root {
+            --base: #ffc600;
+            --spacing: 10px;
+            --blur: 10px;
+        }
+
+        html,
+        body {
+            margin: 0;
+            background: #041d3a;
+        }
+
+        main {
+            margin: auto;
+            width: 100vmin;
+            height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            color: white;
+        }
+
+        header {
+            margin: 3em;
+        }
+
+        header h1 i {
+            font-style: normal;
+            color: var(--base);
+        }
+        form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        label {
+            display: block;
+            margin: 1em;
+        }
+
+        input[type="range"] {
+            transform: translateY(.5em);
+        }
+
+        footer {
+            height: 60vmin;
+            border: var(--spacing) solid var(--base);
+            box-sizing: border-box;
+            background: no-repeat center / cover url(city.jpg);
+            filter: blur(var(--blur));
+        }
+    </style>
+
+    <script>
+    'use strict';
+
+    window.addEventListener('DOMContentLoaded', e => {
+        const inputs = document.querySelectorAll('input');
+
+        inputs.forEach(control => {
+            control.addEventListener('change', handleUpdate);
+            control.addEventListener('mousemove', handleUpdate);
+        });
+
+        function handleUpdate() {
+            const units = this.dataset.units || '';
+            document.documentElement.style.setProperty(`--${this.id}`, this.value + units);
+        }
+    });
+
+    </script>
+</head>
+
+<body>
+    <main>
+        <header>
+            <h1>Update CSS Variables with <i>JS</i></h1>
+            <form action="#">
+                <label for="spacing">Spacing:
+                    <input type="range" id="spacing" min="10" max="200" value="10" data-units="px">
+                </label>
+                <label for="blur">Blur:
+                    <input type="range" id="blur" min="0" max="25" value="10" data-units="px">
+                </label>
+                <label for="base">Base Color:
+                    <input type="color" id="base" value="#ffc600">
+                </label>
+            </form>
+        </header>
+
+        <footer>
+        </footer>
+    </main>
+</body>
+
+</html>
