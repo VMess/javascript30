@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clock</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+        }
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(110deg, #8ffa, #08aa), 
+            linear-gradient(170deg, #87ceeb, cyan, blue, darkblue, blue);
+            xbackground: linear-gradient(110deg, #0008, #fff8, #0008, #fff8, #0008, #fff8, #0008, #fff8),
+            linear-gradient(170deg, #000, #fff, #000, #fff, #000, #fff, #000, #fff);
+        }
+
+        #clock {
+            position: relative;
+            width: 50vmin;
+            height: 50vmin;
+            border: 10px solid white;
+            border-radius: 50%;
+            background: #0002;
+        }
+
+        #clock>* {
+            position: absolute;
+            transform-origin: 50% 100%;
+        }
+
+        #hours {
+            width: 2%;
+            height: 35%;
+            left: 49%;
+            top: 15%;
+            background: black;
+        }
+
+        #minutes {
+            width: 2%;
+            height: 45%;
+            left: 49%;
+            top: 5%;
+            background: black;
+        }
+
+        #seconds {
+            width: 1%;
+            height: 45%;
+            left: 49.5%;
+            top: 5%;
+            background: darkred;
+        }
+
+    </style>
+
+    <script>
+        'use strict';
+
+        window.addEventListener('DOMContentLoaded', e => {
+            const clock = document.querySelector('#clock');
+            const [hours, minutes, seconds] = clock.children;
+            function setClock() {
+                const now = new Date;
+                seconds.style.transition = now.getSeconds() ? 'transform .4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' : '';
+                seconds.style.transform = `rotate(${now.getSeconds() * 6}deg)`;
+                minutes.style.transform = `rotate(${now.getMinutes() * 6 + (now.getSeconds() / 10 | 0)}deg)`;
+                hours.style.transform = `rotate(${now.getHours() * 30 + (now.getMinutes() / 2 | 0)}deg)`;
+            }
+
+            setClock();
+
+            setTimeout(() => {
+                setInterval(setClock, 1000);
+            }, 1000 - Date.now() % 1000);
+        });
+
+    </script>
+</head>
+
+<body>
+    <main>
+        <div id="clock">
+            <div id="hours"></div>
+            <div id="minutes"></div>
+            <div id="seconds"></div>
+        </div>
+    </main>
+</body>
+
+</html>
