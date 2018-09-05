@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Array Cardio Practice</title>
+
+    <script>
+        'use strict';
+
+// map will return the same number of elements as the array it was given, but you can mess with the individual element
+        const inventors = (info => 
+            info.split('\n').map(person => {
+                const [name, lived] = person.split(': ');
+                const [first, last] = name.split(' ');
+                const [born, passed] = lived.split('-');
+
+                return { first, last, born, passed };
+            })
+        )(`Albert Einstein: 1879-1955
+Isaac Newton: 1643-1727
+Galileo Galilei: 1564-1642
+Marie Curie: 1867-1934
+Johannes Kepler: 1571-1630
+Nicolaus Copernicus: 1473-1543
+Max Planck: 1858-1947`);
+
+const people = [
+    'Beck, Glenn',
+'Becker, Carl',
+'Beckett, Samuel',
+'Beddoes, Mick',
+'Beecher, Henry',
+'Beethoven, Ludwig',
+'Begin, Menachem',
+'Belloc, Hilaire',
+'Bellow, Saul',
+'Benchley, Robert',
+'Bensenson, Peter',
+'Ben-Gurion, David',
+'Benjamin, Walter',
+'Benn, Tony',
+'Bennington, Chester',
+'Benson, Leana',
+'Bent, Silas',
+'Bentsen, Lloyd',
+'Berger, Ric',
+'Bergman, Ingmar',
+'Berio, Luciano',
+'Berle, Milton',
+'Berlin, Irving',
+'Berne, Eric',
+'Bernhard, Sandra',
+'Berra, Yogi',
+'Berry, Halle',
+'Berry, Wendell',
+'Bethea, Erin',
+'Bevan, Aneurin',
+'Bevel, Ken',
+'Biden, Joseph',
+'Bierce, Ambrose',
+'Biko, Steve',
+'Billings, Josh',
+'Biondo, Frank',
+'Birrell, Augustine',
+'Black, Elk',
+'Blair, Robert',
+'Blair, Tony',
+'Blake, William'
+];
+
+// filter will return a new array containing elements if the functions result is true...let's u mess with the entire list, but not with elements in list
+console.log("Filter assignment \n filter the list of inventors born in the 1500's");
+console.table(inventors.filter(person => person.born.slice(0, 2) == '15'));
+
+// map will return the same number of elements as the array it was given, but you can mess with the individual element
+console.log('Map assignment \n provide a list of inventors first and last names');
+console.table(inventors.map(inventor => `${inventor.first} ${inventor.last}`));
+
+
+// sort will reorder the list it is provided, cannot remove elements, but will flip them if the result of the function is True
+console.log('Sort assignment \n sort the birthdate youngest to oldest');
+console.table(inventors.sort((a, b) => a.born > b.born)); 
+
+// reduce accumulates quantities derived from each element in an array
+console.log('Reduce assignment \n total number of years inventors lived');
+console.log(inventors.reduce((total, inventor) => total + (inventor.passed - inventor.born), 0));
+
+console.log('Sort assignment 2 \n sort inventors by years lived');
+console.table(inventors.sort((a, b) => (a.passed - a.born) > (b.passed - b.born)));
+
+console.log('Filter assignment 2 \n filter Boulevards in Paris that contain the letters "de" anywhere in the name');
+// https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+
+// function boulevards(criteria) {
+//     const links = Array.from(document.querySelector('.mw-category').querySelectorAll('a'));
+//     const names = links.map(link => link.textContent);
+//     const matches = names.filter(name => name.includes(criteria));
+//     console.table(matches);
+// }
+
+// boulevards('de');
+
+
+console.log('Sort assignment 3 \n sort the people alphabetically by last name');
+console.table(people.map(person => {
+    const [last, first] = person.split(', ');
+    return {last, first};
+}).sort((a, b) => (a.last > b.last) * 2 - 1));
+
+console.log('Reduce assignment 2 \n sum up the instances of each item');
+const data = 'car car truck truck bike walk car van bike walk car van car truck'.split(' ');
+
+console.table(data.reduce((obj, mode) => {obj[mode] = mode in obj ? obj[mode] + 1 : 1; return obj}, {}));
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
