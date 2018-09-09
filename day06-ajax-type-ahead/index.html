@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ajax Type Ahead with Fetch</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        main {
+            width: 100vw;
+            min-height: 100vh;
+            box-sizing: border-box;
+            padding: 2em;
+            background: gold;
+        }
+
+        header,
+        footer {
+            margin: auto;
+            width: 50vmin;
+        }
+
+        form {
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff8;
+        }
+
+        input {
+            margin: 1rem;
+            display: block;
+            width: calc(100% - 2rem);
+            height: 1.5em;
+            border: none;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0 1em;
+            xperspective: 40em;
+            list-style: none;
+        }
+
+        li {
+            margin: 1px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 1em;
+            background: #fff8;
+        }
+
+        li h3 {
+            margin: 0;
+            font-weight: normal;
+        }
+
+        li p {
+            margin: 0;
+            font-size: 80%;
+        }
+
+        li i {
+            font-style: normal;
+            background: gold;
+        }
+
+        xli:nth-child(even) {
+            transform: rotateX(30deg);
+        }
+
+        xli:nth-child(odd) {
+            transform: rotateX(-30deg);
+        }
+    </style>
+    <script>
+        'use strict';
+
+        // Ajax Type Ahead with Fetch 
+        // Fetch will return a promise    
+        window.addEventListener('DOMContentLoaded', e => {
+            const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+            const cities = [];
+
+            fetch(endpoint)
+                .then(blob => blob.json())
+                .then(data => {
+                    cities.push(...data);
+                    console.table(findMatches('new', cities));
+                });
+
+            function findMatches(pattern, dataBase) {
+                const regex = new RegExp(pattern, 'gi');
+
+                return dataBase.filter(record => {
+                    // here we need to figure out if the record containes the pattern that was searched
+                    return Object.keys(record).reduce((matches, key) => matches || (typeof record[key] == 'string' && !!record[key].match(regex)), false);
+                });
+            }
+
+            function displayMatches() {
+                const regex = new RegExp(this.value, 'gi');
+                const matchArray = findMatches(this.value, cities.map(({city, state, population}) => ({city, state, population})));
+                const list = matchArray.map(place => {
+                    let matches = place.city.match(regex);
+                    let city = place.city;
+                    
+                    matches && matches.forEach(match => {
+                        city = city.replace(match, `<i>${match}</i>`);
+                    });
+
+                    matches = place.state.match(regex);
+                    let state = place.state;
+
+                    matches && matches.forEach(match => {
+                        state = state.replace(match, `<i>${match}</i>`);
+                    });
+                    return `
+                <li>
+                    <h3>${city}, ${state}</h3>
+                    <p>${parseInt(place.population).toLocaleString()}</p>
+                </li>
+                `});
+                suggestions.innerHTML = list.join('');
+            }
+            
+            const form = document.querySelector('form');
+            const searchInput = document.querySelector('input');
+            const suggestions = document.querySelector('ul');
+
+            form.addEventListener('submit', e => {
+                e.stopPropagation();
+                e.preventDefault();
+            });
+
+            searchInput.addEventListener('change', displayMatches);
+            searchInput.addEventListener('keyup', displayMatches);
+
+        });
+    </script>
+
+</head>
+
+<body>
+    <main>
+        <header>
+            <form action="">
+                <!-- when action is empty, the current page will reload by default -->
+                <input type="text" placeholder="City or State" id="">
+            </form>
+        </header>
+        <footer>
+            <ul>
+                <li>Filter for a City</li>
+                <li>or a State</li>
+            </ul>
+        </footer>
+    </main>
+
+</body>
+
+</html>
